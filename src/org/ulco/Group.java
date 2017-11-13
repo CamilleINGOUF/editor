@@ -43,12 +43,11 @@ public class Group {
 
         for (Object o : m_objectList) {
             GraphicsObject element = (GraphicsObject) (o);
-
             g.addObject(element.copy());
         }
+        
         for (Object o : m_groupList) {
             Group element = (Group) (o);
-
             g.addGroup(element.copy());
         }
         return g;
