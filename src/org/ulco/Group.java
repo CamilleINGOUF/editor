@@ -160,7 +160,7 @@ public class Group extends GraphicsObject implements IObjectsContainer{
             GraphicsObject element = m_objectList.elementAt(i);
             if(element.isSimple()) {
                 str += element.toJson();
-                if (i < getObjects().size() - 1) {
+                if (i < sizeSimpleObjects() - 1) {
                     str += ", ";
                 }
             }
@@ -183,7 +183,7 @@ public class Group extends GraphicsObject implements IObjectsContainer{
             GraphicsObject object = m_objectList.elementAt(i);
             if(object.isSimple()) {
                 str += object.toString();
-                if (i < getObjects().size() - 1) {
+                if (i < sizeSimpleObjects() - 1) {
                     str += ", ";
                 }
             }
