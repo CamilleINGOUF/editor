@@ -2,7 +2,7 @@ package org.ulco;
 
 import java.util.Vector;
 
-public class Layer {
+public class Layer implements IObjectsContainer{
     public Layer() {
         m_list = new Vector<GraphicsObject>();
         m_ID = ID.getInstance().getID();
@@ -64,7 +64,7 @@ public class Layer {
             } else {
                 groupStr = groupsStr.substring(0, separatorIndex);
             }
-            m_list.add(JSON.parseGroup(groupStr));
+            m_list.add(JSON.parse(groupStr));
             if (separatorIndex == -1) {
                 groupsStr = "";
             } else {
@@ -99,29 +99,7 @@ public class Layer {
     }
 
     public String toJson() {
-        String str = "{ type: layer, objects : { ";
-                                                                         
-        for (int i = 0; i < m_list.size(); ++i) {                        
-            GraphicsObject element = m_list.elementAt(i);                
-            if(element.isSimple()) {                                     
-                                                                         
-                str += element.toJson();                                 
-                if (i < m_list.size() - 1) {                             
-                    str += ", ";                                         
-                }                                                        
-            }                                                            
-        }                                                                
-                                                                         
-        str += " }, groups : { ";                                        
-                                                                         
-        for (int i = 0; i < m_list.size(); ++i) {                        
-            GraphicsObject element = m_list.elementAt(i);                
-            if(!element.isSimple()) {                                    
-                str += element.toJson();                                 
-            }                                                            
-        }                                                                
-                                                                         
-        return str + " } }";                                             
+        return "";
     }
 
     public Vector<GraphicsObject> getObjectList()
@@ -131,4 +109,22 @@ public class Layer {
                                                                          
     private Vector<GraphicsObject> m_list;                               
     private int m_ID;
+
+    @Override
+    public Vector<GraphicsObject> getObjects() {
+        return m_list;
+    }
+
+    @Override
+    public int sizeSimpleObjects() {
+        int size = 0;
+
+        for(GraphicsObject go : m_list) {
+            if(go.isSimple()) {
+                size++;
+            }
+        }
+
+        return size;
+    }
 }

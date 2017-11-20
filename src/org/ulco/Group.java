@@ -154,26 +154,7 @@ public class Group extends GraphicsObject implements IObjectsContainer{
     }
 
     public String toJson() {
-        String str = "{ type: group, objects : { ";
-
-        for (int i = 0; i < m_objectList.size(); ++i) {
-            GraphicsObject element = m_objectList.elementAt(i);
-            if(element.isSimple()) {
-                str += element.toJson();
-                if (i < sizeSimpleObjects() - 1) {
-                    str += ", ";
-                }
-            }
-        }
-        str += " }, groups : { ";
-
-        for (int i = 0; i < m_objectList.size(); ++i) {
-            GraphicsObject element = m_objectList.elementAt(i);
-            if(!element.isSimple()) {
-                str += element.toJson();
-            }
-        }
-        return str + " } }";
+        return "";
     }
 
     public String toString() {
