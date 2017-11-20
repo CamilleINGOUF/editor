@@ -165,18 +165,18 @@ public class Group extends GraphicsObject{
 
         for (int i = 0; i < getObjects().size(); ++i) {
             GraphicsObject element = getObjects().elementAt(i);
-
-            str += element.toJson();
-            if (i < getObjects().size() - 1) {
-                str += ", ";
+            if(element.isSimple()) {
+                str += element.toJson();
+                if (i < getObjects().size() - 1) {
+                    str += ", ";
+                }
             }
         }
         str += " }, groups : { ";
 
         for (int i = 0; i < m_objectList.size(); ++i) {
-            if(m_objectList.elementAt(i) instanceof Group) {
-                Group element = (Group)m_objectList.elementAt(i);
-
+            GraphicsObject element = m_objectList.elementAt(i);
+            if(!element.isSimple()) {
                 str += element.toJson();
             }
         }
@@ -186,25 +186,32 @@ public class Group extends GraphicsObject{
     public String toString() {
         String str = "group[[";
 
-        for (int i = 0; i < getObjects().size(); ++i) {
-            GraphicsObject element = getObjects().elementAt(i);
-
-            str += element.toString();
-            if (i < getObjects().size() - 1) {
-                str += ", ";
+        for (int i = 0; i < m_objectList.size(); ++i) {
+            GraphicsObject object = m_objectList.elementAt(i);
+            if(object.isSimple()) {
+                str += object.toString();
+                if (i < getObjects().size() - 1) {
+                    str += ", ";
+                }
             }
-
         }
         str += "],[";
 
         for (int i = 0; i < m_objectList.size(); ++i) {
-            if(m_objectList.elementAt(i) instanceof Group) {
-                Group element = (Group)m_objectList.elementAt(i);
+            GraphicsObject object = m_objectList.elementAt(i);
+            if(!object.isSimple()) {
+                Group element = (Group) object;
 
                 str += element.toString();
             }
         }
         return str + "]]";
+    }
+
+    @Override
+    public boolean isSimple()
+    {
+        return false;
     }
 
     private Vector<GraphicsObject> m_objectList;

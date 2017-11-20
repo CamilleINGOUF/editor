@@ -19,5 +19,10 @@ abstract public class GraphicsObject {
 
     abstract public String toString();
 
-    private int m_ID;
+    protected int m_ID;
+
+    public boolean isSimple()
+    {
+        return true;
+    }
 }
