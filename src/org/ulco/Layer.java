@@ -93,12 +93,24 @@ public class Layer {
 
         for (int i = 0; i < m_list.size(); ++i) {
             GraphicsObject element = m_list.elementAt(i);
+            if(element.isSimple()) {
 
-            str += element.toJson();
-            if (i < m_list.size() - 1) {
-                str += ", ";
+                str += element.toJson();
+                if (i < m_list.size() - 1) {
+                    str += ", ";
+                }
             }
         }
+
+        str += " }, groups : { ";
+
+        for (int i = 0; i < m_list.size(); ++i) {
+            GraphicsObject element = m_list.elementAt(i);
+            if(!element.isSimple()) {
+                str += element.toJson();
+            }
+        }
+
         return str + " } }";
     }
 

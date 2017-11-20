@@ -25,4 +25,9 @@ abstract public class GraphicsObject {
     {
         return true;
     }
+
+    public int size()
+    {
+        return 1;
+    }
 }

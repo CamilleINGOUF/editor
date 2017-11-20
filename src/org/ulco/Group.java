@@ -5,11 +5,12 @@ import java.util.Vector;
 public class Group extends GraphicsObject{
 
     public Group() {
+        super();
         m_objectList = new Vector<GraphicsObject>();
-        m_ID = ++ID.ID;
     }
 
     public Group(String json) {
+        super();
         //m_groupList = new  Vector<Group>();
         m_objectList = new Vector<GraphicsObject>();
         String str = json.replaceAll("\\s+","");
@@ -121,27 +122,10 @@ public class Group extends GraphicsObject{
     }
 
     public int size() {
-        int size = m_objectList.size();
-
-        for (int i = 0; i < m_objectList.size(); ++i) {
-            if(m_objectList.elementAt(i) instanceof Group) {
-                Group element = (Group)m_objectList.elementAt(i);
-
-                size--;//We do not count the actual group as one object
-                size += element.size();
-            }
-        }
-        return size;
-    }
-
-    public int sizeObjects()
-    {
         int size = 0;
 
-        for(Object o : m_objectList)
-        {
-            if(!(o instanceof Group))
-                size++;
+        for (int i = 0; i < m_objectList.size(); ++i) {
+            size += m_objectList.elementAt(i).size();
         }
 
         return size;
