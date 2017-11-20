@@ -5,16 +5,18 @@ import java.util.Vector;
 public class Layer {
     public Layer() {
         m_list = new Vector<GraphicsObject>();
-        m_ID = ++ID.ID;
+        m_ID = ID.getInstance().getID();
     }
 
     public Layer(String json) {
         m_list= new Vector<GraphicsObject>();
         String str = json.replaceAll("\\s+","");
         int objectsIndex = str.indexOf("objects");
+        int groupsIndex = str.indexOf("groups");
         int endIndex = str.lastIndexOf("}");
 
-        parseObjects(str.substring(objectsIndex + 9, endIndex - 1));
+        parseObjects(str.substring(objectsIndex + 9, groupsIndex - 2));
+        parseGroups(str.substring(groupsIndex + 8, endIndex - 1));
     }
 
     public void add(GraphicsObject o) {
@@ -52,6 +54,25 @@ public class Layer {
         }
     }
 
+    private void parseGroups(String groupsStr) {
+        while (!groupsStr.isEmpty()) {
+            int separatorIndex = searchSeparator(groupsStr);
+            String groupStr;
+
+            if (separatorIndex == -1) {
+                groupStr = groupsStr;
+            } else {
+                groupStr = groupsStr.substring(0, separatorIndex);
+            }
+            m_list.add(JSON.parseGroup(groupStr));
+            if (separatorIndex == -1) {
+                groupsStr = "";
+            } else {
+                groupsStr = groupsStr.substring(separatorIndex + 1);
+            }
+        }
+    }
+
     private int searchSeparator(String str) {
         int index = 0;
         int level = 0;
@@ -73,47 +94,41 @@ public class Layer {
         if (found) {
             return index;
         } else {
-            return -1;
-        }
-    }
-
-    public GraphicsObjects select(Point pt, double distance) {
-        GraphicsObjects list = new GraphicsObjects();
-
-        for (GraphicsObject object : m_list) {
-            if (object.isClosed(pt, distance)) {
-                list.add(object);
-            }
-        }
-        return list;
+            return -1;                                                  
+        }                                                               
     }
 
     public String toJson() {
         String str = "{ type: layer, objects : { ";
-
-        for (int i = 0; i < m_list.size(); ++i) {
-            GraphicsObject element = m_list.elementAt(i);
-            if(element.isSimple()) {
-
-                str += element.toJson();
-                if (i < m_list.size() - 1) {
-                    str += ", ";
-                }
-            }
-        }
-
-        str += " }, groups : { ";
-
-        for (int i = 0; i < m_list.size(); ++i) {
-            GraphicsObject element = m_list.elementAt(i);
-            if(!element.isSimple()) {
-                str += element.toJson();
-            }
-        }
-
-        return str + " } }";
+                                                                         
+        for (int i = 0; i < m_list.size(); ++i) {                        
+            GraphicsObject element = m_list.elementAt(i);                
+            if(element.isSimple()) {                                     
+                                                                         
+                str += element.toJson();                                 
+                if (i < m_list.size() - 1) {                             
+                    str += ", ";                                         
+                }                                                        
+            }                                                            
+        }                                                                
+                                                                         
+        str += " }, groups : { ";                                        
+                                                                         
+        for (int i = 0; i < m_list.size(); ++i) {                        
+            GraphicsObject element = m_list.elementAt(i);                
+            if(!element.isSimple()) {                                    
+                str += element.toJson();                                 
+            }                                                            
+        }                                                                
+                                                                         
+        return str + " } }";                                             
     }
 
-    private Vector<GraphicsObject> m_list;
+    public Vector<GraphicsObject> getObjectList()
+    {
+        return m_list;
+    }
+                                                                         
+    private Vector<GraphicsObject> m_list;                               
     private int m_ID;
 }

@@ -14,13 +14,11 @@ public class ID {
     {
         if(instance == null)
             instance = new ID();
-        else
-            instance.id++;
         return instance;
     }
 
     public int getID()
     {
-        return id;
+        return id++;
     }
 }

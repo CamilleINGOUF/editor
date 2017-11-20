@@ -11,7 +11,6 @@ public class Group extends GraphicsObject{
 
     public Group(String json) {
         super();
-        //m_groupList = new  Vector<Group>();
         m_objectList = new Vector<GraphicsObject>();
         String str = json.replaceAll("\\s+","");
         int objectsIndex = str.indexOf("objects");
@@ -46,7 +45,12 @@ public class Group extends GraphicsObject{
     }
 
     @Override
-    boolean isClosed(Point pt, double distance) {
+    public boolean isClosed(Point pt, double distance) {
+        for(GraphicsObject go : m_objectList) {
+            if(go.isClosed(pt,distance)) {
+                return true;
+            }
+        }
         return false;
     }
 
