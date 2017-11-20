@@ -2,7 +2,7 @@ package org.ulco;
 
 import java.util.Vector;
 
-public class Group extends GraphicsObject{
+public class Group extends GraphicsObject implements IObjectsContainer{
 
     public Group() {
         super();
@@ -97,7 +97,7 @@ public class Group extends GraphicsObject{
             } else {
                 groupStr = groupsStr.substring(0, separatorIndex);
             }
-            m_objectList.add(JSON.parseGroup(groupStr));
+            m_objectList.add(JSON.parse(groupStr));
             if (separatorIndex == -1) {
                 groupsStr = "";
             } else {
@@ -137,22 +137,27 @@ public class Group extends GraphicsObject{
 
     public Vector<GraphicsObject> getObjects()
     {
-        Vector<GraphicsObject> objects = new Vector<GraphicsObject>();
+        return m_objectList;
+    }
 
-        for(Object o : m_objectList)
-        {
-            if(!(o instanceof Group))
-                objects.add((GraphicsObject)o);
+    @Override
+    public int sizeSimpleObjects() {
+        int size = 0;
+
+        for(GraphicsObject go : m_objectList) {
+            if(go.isSimple()) {
+                size++;
+            }
         }
 
-        return objects;
+        return size;
     }
 
     public String toJson() {
         String str = "{ type: group, objects : { ";
 
-        for (int i = 0; i < getObjects().size(); ++i) {
-            GraphicsObject element = getObjects().elementAt(i);
+        for (int i = 0; i < m_objectList.size(); ++i) {
+            GraphicsObject element = m_objectList.elementAt(i);
             if(element.isSimple()) {
                 str += element.toJson();
                 if (i < getObjects().size() - 1) {
