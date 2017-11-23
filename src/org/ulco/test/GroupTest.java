@@ -42,7 +42,7 @@ public class GroupTest extends TestCase {
 
         g.add(s);
         g.add(c);
-        assertEquals(JSON.toJSON(g), "{ type: group, objects : { { type: square, center: { type: point, x: 0.0, y: 0.0 }, length: 5.0 }, " +
+        assertEquals(JSONBuilder.toJSON(g), "{ type: group, objects : { { type: square, center: { type: point, x: 0.0, y: 0.0 }, length: 5.0 }, " +
                 "{ type: circle, center: { type: point, x: 5.0, y: 5.0 }, radius: 4.0 } }, groups : {  } }");
     }
 
@@ -57,7 +57,7 @@ public class GroupTest extends TestCase {
         g.add(c);
         g2.add(g);
         g2.add(r);
-        assertEquals(JSON.toJSON(g2), "{ type: group, objects : { { type: rectangle, center: { type: point, x: -6.0, y: 10.0 }, " +
+        assertEquals(JSONBuilder.toJSON(g2), "{ type: group, objects : { { type: rectangle, center: { type: point, x: -6.0, y: 10.0 }, " +
                 "height: 5.2, width: 9.0 } }, groups : { { type: group, objects : { { type: square, center: { type: point, x: 0.0, " +
                 "y: 0.0 }, length: 5.0 }, { type: circle, center: { type: point, x: 5.0, y: 5.0 }, radius: 4.0 } }, " +
                 "groups : {  } } } }");
@@ -78,8 +78,8 @@ public class GroupTest extends TestCase {
 
         assertEquals(s.getOrigin().getX(), 1.);
         assertEquals(s.getOrigin().getY(), 1.);
-        assertEquals(c.getCenter().getX(), 6.);
-        assertEquals(c.getCenter().getY(), 6.);
+        assertEquals(c.getOrigin().getX(), 6.);
+        assertEquals(c.getOrigin().getY(), 6.);
         assertEquals(r.getOrigin().getX(), -6.);
         assertEquals(r.getOrigin().getY(), 10.);
     }
@@ -99,8 +99,8 @@ public class GroupTest extends TestCase {
 
         assertEquals(s.getOrigin().getX(), 1.);
         assertEquals(s.getOrigin().getY(), 1.);
-        assertEquals(c.getCenter().getX(), 6.);
-        assertEquals(c.getCenter().getY(), 6.);
+        assertEquals(c.getOrigin().getX(), 6.);
+        assertEquals(c.getOrigin().getY(), 6.);
         assertEquals(r.getOrigin().getX(), -5.);
         assertEquals(r.getOrigin().getY(), 11.);
     }

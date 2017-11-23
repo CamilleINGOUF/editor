@@ -2,6 +2,7 @@ package org.ulco.test;
 
 import junit.framework.TestCase;
 import org.ulco.GraphicsObject;
+import org.ulco.JSONBuilder;
 import org.ulco.Point;
 import org.ulco.Circle;
 
@@ -17,12 +18,12 @@ public class CircleTest extends TestCase {
     public void testJson() throws Exception {
         Circle s = new Circle(new Point(0,0), 10);
 
-        assertEquals(s.toJson(), "{ type: circle, center: { type: point, x: 0.0, y: 0.0 }, radius: 10.0 }");
+        assertEquals(JSONBuilder.toJSON(s), "{ type: circle, center: { type: point, x: 0.0, y: 0.0 }, radius: 10.0 }");
     }
 
     public void testCopy() throws Exception {
         Circle s = new Circle(new Point(0,0), 10);
 
-        assertEquals(s.toJson(), s.copy().toJson());
+        assertEquals(JSONBuilder.toJSON(s), JSONBuilder.toJSON(s.copy()));
     }
 }

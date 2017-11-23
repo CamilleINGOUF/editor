@@ -1,6 +1,6 @@
 package org.ulco;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
 public class JSON {
@@ -11,25 +11,25 @@ public class JSON {
 
         try {
             type = type.substring(0, 1).toUpperCase() + type.substring(1);
-            type = "org.ulco."+type;
+           // type = "org.ulco."+type;
 
 
-            Class resultClass =  Class.forName(type);
-            Constructor constructor = resultClass.getDeclaredConstructor(String.class);
-            o = (GraphicsObject) constructor.newInstance(str);
+            Class resultClass =  Class.forName(ObjectBuilder.class.getName());
+            Method method = resultClass.getMethod("create"+type,String.class);
+            o = (GraphicsObject) method.invoke(null, str);
         } catch (Exception e) {
-
+            System.err.println(e.fillInStackTrace());
         }
 
         return o;
     }
 
     static public Layer parseLayer(String json) {
-        return new Layer(json);
+        return ObjectBuilder.createLayer(json);
     }
 
     static public Document parseDocument(String json) {
-        return new Document(json);
+        return ObjectBuilder.createDocument(json);
     }
 
     static public String toJSON(IObjectsContainer ioc)
@@ -42,7 +42,7 @@ public class JSON {
         for (int i = 0; i < objects.size(); ++i) {
             GraphicsObject element = objects.elementAt(i);
             if(element.isSimple()) {
-                str += element.toJson();
+                str += JSONBuilder.toJSON(element);
                 if (i < ioc.sizeSimpleObjects() - 1) {
                     str += ", ";
                 }
@@ -53,7 +53,7 @@ public class JSON {
         for (int i = 0; i < objects.size(); ++i) {
             GraphicsObject element = objects.elementAt(i);
             if(!element.isSimple()) {
-                str += JSON.toJSON((Group)element);
+                str += JSONBuilder.toJSON((Group)element);
             }
         }
         return str + " } }";

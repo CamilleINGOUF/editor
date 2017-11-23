@@ -7,15 +7,6 @@ public class Document {
         m_layers = new Vector<Layer>();
     }
 
-    public Document(String json) {
-        m_layers = new Vector<Layer>();
-        String str = json.replaceAll("\\s+", "");
-        int layersIndex = str.indexOf("layers");
-        int endIndex = str.lastIndexOf("}");
-
-        parseLayers(str.substring(layersIndex + 8, endIndex));
-    }
-
     public Layer createLayer() {
         Layer layer = new Layer();
 
@@ -36,9 +27,9 @@ public class Document {
         return size;
     }
 
-    private void parseLayers(String layersStr) {
+    public void parseLayers(String layersStr) {
         while (!layersStr.isEmpty()) {
-            int separatorIndex = searchSeparator(layersStr);
+            int separatorIndex = Util.searchSeparator(layersStr);
             String layerStr;
 
             if (separatorIndex == -1) {
@@ -53,45 +44,6 @@ public class Document {
                 layersStr = layersStr.substring(separatorIndex + 1);
             }
         }
-    }
-
-    private int searchSeparator(String str) {
-        int index = 0;
-        int level = 0;
-        boolean found = false;
-
-        while (!found && index < str.length()) {
-            if (str.charAt(index) == '{') {
-                ++level;
-                ++index;
-            } else if (str.charAt(index) == '}') {
-                --level;
-                ++index;
-            } else if (str.charAt(index) == ',' && level == 0) {
-                found = true;
-            } else {
-                ++index;
-            }
-        }
-        if (found) {
-            return index;
-        } else {
-            return -1;
-        }
-    }
-
-    public String toJson() {
-        String str = "{ type: document, layers: { ";
-
-        for (int i = 0; i < m_layers.size(); ++i) {
-            Layer element = m_layers.elementAt(i);
-
-            str += JSON.toJSON(element);
-            if (i < m_layers.size() - 1) {
-                str += ", ";
-            }
-        }
-        return str + " } }";
     }
 
     public Vector<Layer> getLayers()

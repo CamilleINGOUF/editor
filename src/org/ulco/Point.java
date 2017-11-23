@@ -35,10 +35,6 @@ public class Point {
         m_y += delta.getY();
     }
 
-    public String toJson() {
-        return "{ type: point, x: " + m_x + ", y: " + this.m_y + " }";
-    }
-
     public String toString() {
         return "point[" + m_x + "," + m_y + "]";
     }
